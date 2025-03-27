@@ -7,6 +7,7 @@ from langchain_groq import ChatGroq
 import os
 from dotenv import load_dotenv
 import re
+from routes.tax_routes import tax_bp
 
 load_dotenv()
 
@@ -16,6 +17,7 @@ CORS(app)
 # Configure Groq
 groq_api_key = os.getenv("GROQ_API_KEY")
 llm = ChatGroq(temperature=1, model_name="llama-3.3-70b-versatile", groq_api_key=groq_api_key)
+app.register_blueprint(tax_bp, url_prefix='/api/tax')
 
 # Transaction Extraction Template
 extraction_template = """
