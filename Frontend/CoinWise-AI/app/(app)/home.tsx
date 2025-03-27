@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
-import { useLocalSearchParams, Stack, Link } from 'expo-router';
+import { useLocalSearchParams, Stack, Link, useRouter } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import AccountSummary from '@/components/AccountSummary';
 import TransactionList from '@/components/TransactionList';
@@ -9,6 +9,7 @@ import { banks } from '../../constants/bank';
 export default function HomeScreen() {
   const { bankId } = useLocalSearchParams();
   const selectedBank = banks.find(bank => bank.id === bankId);
+  const router = useRouter();
 
   return (
     <ScrollView style={styles.container}>
@@ -25,28 +26,23 @@ export default function HomeScreen() {
         <AccountSummary bankId={bankId as string} />
 
         {/* Quick Actions */}
-        {/* <View style={styles.quickActions}>
+        <View style={styles.quickActions}>
           <ActionButton 
             icon="swap-horiz" 
             label="Transfer"
             onPress={() => {}} 
           />
           <ActionButton 
-            icon="account-balance-wallet" 
-            label="Accounts"
-            onPress={() => {}}
+            icon="picture-as-pdf" 
+            label="PDF"
+            onPress={() => router.push('/pdfPage')} 
           />
           <ActionButton 
-            icon="attach-money" 
-            label="Pay"
-            onPress={() => {}}
+            icon="receipt-long" 
+            label="Transactions"
+            onPress={() => router.push('/transactions')} 
           />
-          <ActionButton 
-            icon="dashboard" 
-            label="More"
-            onPress={() => {}}
-          />
-        </View> */}
+        </View>
 
         {/* Recent Transactions */}
         <View style={styles.transactionsContainer}>
