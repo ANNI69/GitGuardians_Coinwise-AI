@@ -22,7 +22,7 @@ const ChatScreen = () => {
   const handlePresetPrompt = async (prompt: string) => {
     setLoading(true);
     try {
-      const response = await fetch('http://192.168.1.100:3000/ask', {
+      const response = await fetch('http://192.168.247.50:5000/suggestion/ask', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ const ChatScreen = () => {
     
     setLoading(true);
     try {
-      const response = await fetch('http://192.168.1.100:3000/askSuggestion', {
+      const response = await fetch('http://192.168.247.50:5000/suggestion/ask', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
