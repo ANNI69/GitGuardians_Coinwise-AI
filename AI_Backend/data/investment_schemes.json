@@ -1,0 +1,102 @@
+[
+    {
+      "name": "Nifty 50 Index Fund",
+      "type": "Equity",
+      "risk": "High",
+      "returns": "12-15% CAGR",
+      "lockin": 3,
+      "min_investment": 500,
+      "tax_benefits": "LTCG Tax >1L",
+      "suitable_for": ["Long-term growth", "High risk tolerance"]
+    },
+    {
+      "name": "PPF",
+      "type": "Govt Scheme",
+      "risk": "Low",
+      "returns": "7.1% Fixed",
+      "lockin": 15,
+      "min_investment": 500,
+      "tax_benefits": "80C Deduction",
+      "suitable_for": ["Tax saving", "Retirement"]
+    },
+    {
+      "name": "ELSS Mutual Fund",
+      "type": "Equity",
+      "risk": "High",
+      "returns": "10-14% CAGR",
+      "lockin": 3,
+      "min_investment": 1000,
+      "tax_benefits": "80C Deduction",
+      "suitable_for": ["Tax saving", "Wealth creation"]
+    },
+    {
+      "name": "National Pension Scheme",
+      "type": "Hybrid",
+      "risk": "Medium",
+      "returns": "8-12% CAGR",
+      "lockin": 60,
+      "min_investment": 1000,
+      "tax_benefits": "80CCD Deduction",
+      "suitable_for": ["Retirement", "Long-term savings"]
+    },
+    {
+      "name": "Sukanya Samriddhi Yojana",
+      "type": "Govt Scheme",
+      "risk": "Low",
+      "returns": "7.6% Fixed",
+      "lockin": 21,
+      "min_investment": 250,
+      "tax_benefits": "80C Deduction",
+      "suitable_for": ["Girl child education", "Marriage planning"]
+    },
+    {
+      "name": "Corporate Fixed Deposit",
+      "type": "Debt",
+      "risk": "Medium",
+      "returns": "7-9% Fixed",
+      "lockin": 1,
+      "min_investment": 5000,
+      "tax_benefits": "None",
+      "suitable_for": ["Regular income", "Capital preservation"]
+    },
+    {
+      "name": "Bluechip Mutual Fund",
+      "type": "Equity",
+      "risk": "High",
+      "returns": "11-14% CAGR",
+      "lockin": 0,
+      "min_investment": 1000,
+      "tax_benefits": "LTCG Tax >1L",
+      "suitable_for": ["Long-term growth", "Wealth creation"]
+    },
+    {
+      "name": "Senior Citizens Savings Scheme",
+      "type": "Govt Scheme",
+      "risk": "Low",
+      "returns": "8.2% Fixed",
+      "lockin": 5,
+      "min_investment": 1000,
+      "tax_benefits": "80C Deduction",
+      "suitable_for": ["Retirement", "Regular income"]
+    },
+    {
+      "name": "Gold ETF",
+      "type": "Commodity",
+      "risk": "Medium",
+      "returns": "8-10% CAGR",
+      "lockin": 0,
+      "min_investment": 1000,
+      "tax_benefits": "LTCG Tax >1L",
+      "suitable_for": ["Portfolio diversification", "Inflation hedge"]
+    },
+    {
+      "name": "Real Estate Investment Trust",
+      "type": "Alternative",
+      "risk": "Medium",
+      "returns": "8-12% CAGR",
+      "lockin": 0,
+      "min_investment": 10000,
+      "tax_benefits": "Dividend taxable",
+      "suitable_for": ["Regular income", "Real estate exposure"]
+    }
+  ]
