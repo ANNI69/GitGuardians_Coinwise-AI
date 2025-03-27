@@ -125,7 +125,7 @@ const PdfPage = () => {
       {
         id: "3",
         date: "2023-05-17",
-        description: "Online Shopping",
+        description: "Online Shopping(Amazon)",
         amount: 89.99,
         category: "Shopping",
         type: "expense",
