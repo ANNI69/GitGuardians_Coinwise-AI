@@ -1,38 +1,45 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
+import admin from 'firebase-admin';
 
 const router = express.Router();
+const db = admin.firestore();
 
 // Register new user
 router.post('/register', async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { email, password, username } = req.body;
 
     // Check if user already exists
-    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
-    if (existingUser) {
+    const userRecord = await admin.auth().getUserByEmail(email).catch(() => null);
+    if (userRecord) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Create new user
-    const user = new User({ username, email, password });
-    await user.save();
+    // Create user in Firebase Auth
+    const user = await admin.auth().createUser({
+      email,
+      password,
+      displayName: username
+    });
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET || 'your-secret-key',
-      { expiresIn: '24h' }
-    );
+    // Store additional user data in Firestore
+    await db.collection('users').doc(user.uid).set({
+      username,
+      email,
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      isActive: true
+    });
+
+    // Generate custom token
+    const token = await admin.auth().createCustomToken(user.uid);
 
     res.status(201).json({
       message: 'User registered successfully',
       token,
       user: {
-        id: user._id,
-        username: user.username,
-        email: user.email
+        id: user.uid,
+        username,
+        email
       }
     });
   } catch (error) {
@@ -45,55 +52,48 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find user
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+    // Note: Firebase Authentication is handled on the client side
+    // This endpoint should be used to verify the token from client
+    const idToken = req.headers.authorization?.split('Bearer ')[1];
+    if (!idToken) {
+      return res.status(401).json({ message: 'No token provided' });
     }
 
-    // Check password
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET || 'your-secret-key',
-      { expiresIn: '24h' }
-    );
+    // Verify the Firebase ID token
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const user = await admin.auth().getUser(decodedToken.uid);
+    const userData = await db.collection('users').doc(user.uid).get();
 
     res.json({
       message: 'Login successful',
-      token,
       user: {
-        id: user._id,
-        username: user.username,
+        id: user.uid,
+        username: userData.data().username,
         email: user.email
       }
     });
   } catch (error) {
-    res.status(500).json({ message: 'Error logging in', error: error.message });
+    res.status(401).json({ message: 'Invalid credentials' });
   }
 });
 
 // Get user profile
 router.get('/profile', async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) {
+    const idToken = req.headers.authorization?.split('Bearer ')[1];
+    if (!idToken) {
       return res.status(401).json({ message: 'No token provided' });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
-    const user = await User.findById(decoded.userId).select('-password');
+    // Verify the Firebase ID token
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const userData = await db.collection('users').doc(decodedToken.uid).get();
 
-    if (!user) {
+    if (!userData.exists) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.json(user);
+    res.json(userData.data());
   } catch (error) {
     res.status(401).json({ message: 'Invalid token' });
   }
