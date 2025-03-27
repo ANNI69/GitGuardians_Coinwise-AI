@@ -42,6 +42,11 @@ export default function HomeScreen() {
             label="Transactions"
             onPress={() => router.push('/transactions')} 
           />
+          <ActionButton 
+            icon="chat" 
+            label="Chat"
+            onPress={() => router.push('/(app)/chat')} 
+          />
         </View>
 
         {/* Recent Transactions */}

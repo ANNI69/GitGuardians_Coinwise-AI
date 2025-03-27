@@ -12,10 +12,14 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "express": "^4.18.2",
+    "@langchain/community": "^0.3.37",
+    "@langchain/groq": "^0.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "firebase-admin": "^12.0.0",
-    "dotenv": "^16.4.1",
-    "cors": "^2.8.5"
+    "langchain": "^0.3.19",
+    "openai": "^4.89.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.3"

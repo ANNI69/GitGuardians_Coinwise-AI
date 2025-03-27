@@ -10,6 +10,13 @@ interface Transaction {
   bankName: string;
 }
 
+interface NotificationData {
+  app: string;
+  title: string;
+  text: string;
+  time: number;
+}
+
 class NotificationService {
   private static instance: NotificationService;
   private isListening: boolean = false;
@@ -26,10 +33,20 @@ class NotificationService {
   async requestPermission(): Promise<boolean> {
     if (Platform.OS === 'android') {
       try {
-        const granted = await PermissionsAndroid.request(
+        console.log('Requesting notification permission...');
+        const notificationPermission = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
         );
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
+        console.log('Notification permission result:', notificationPermission);
+        
+        console.log('Requesting notification listener permission...');
+        const listenerPermission = await NotificationListener.requestPermission();
+        console.log('Listener permission result:', listenerPermission);
+        
+        const isGranted = notificationPermission === PermissionsAndroid.RESULTS.GRANTED && 
+               listenerPermission === true;
+        console.log('Final permission status:', isGranted);
+        return isGranted;
       } catch (err) {
         console.error('Failed to request notification permission:', err);
         return false;
@@ -39,29 +56,39 @@ class NotificationService {
   }
 
   async startListening(onTransaction: (transaction: Transaction) => void) {
-    if (this.isListening) return;
+    if (this.isListening) {
+      console.log('Already listening for notifications');
+      return;
+    }
 
     try {
-      const hasPermission = await NotificationListener.requestPermission();
-      if (hasPermission === undefined) {
+      console.log('Starting notification listener...');
+      const hasPermission = await this.requestPermission();
+      console.log('Permission status:', hasPermission);
+      
+      if (!hasPermission) {
         throw new Error('Notification permission not granted');
       }
 
-      NotificationListener.onNotificationReceived((notification: any) => {
+      console.log('Setting up notification listener...');
+      NotificationListener.onNotificationReceived((notification: NotificationData) => {
+        console.log('Raw notification received:', notification);
         const transaction = this.parseTransaction(notification);
+        console.log('Parsed transaction result:', transaction);
         if (transaction) {
+          console.log('Calling onTransaction callback...');
           onTransaction(transaction);
         }
       });
-      
 
       this.isListening = true;
+      console.log('Notification listener setup complete');
     } catch (error) {
       console.error('Failed to start notification listener:', error);
     }
   }
 
-  private parseTransaction(notification: any): Transaction | null {
+  private parseTransaction(notification: NotificationData): Transaction | null {
     try {
       const text = notification.text || '';
       const title = notification.title || '';
@@ -74,7 +101,9 @@ class NotificationService {
       const debitMatch = text.match(debitPattern);
 
       if (creditMatch || debitMatch) {
-        const amount = parseFloat((creditMatch || debitMatch)[1].replace(/,/g, ''));
+        const match = creditMatch || debitMatch;
+        if (!match) return null;
+        const amount = parseFloat(match[1].replace(/,/g, ''));
         const type = creditMatch ? 'credit' : 'debit';
         const bankName = title.split(' ')[0] || 'Unknown Bank';
 
