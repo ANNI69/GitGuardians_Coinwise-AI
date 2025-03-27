@@ -12,23 +12,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@langchain/community": "^0.3.37",
-    "@langchain/groq": "^0.2.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "firebase-admin": "^12.0.0",
-    "langchain": "^0.3.19",
-    "openai": "^4.89.1"
-=======
     "express": "^4.18.2",
-    "mongoose": "^8.1.1",
-    "bcryptjs": "^2.4.3",
+    "firebase-admin": "^12.0.0",
     "dotenv": "^16.4.1",
-    "cors": "^2.8.5",
-    "jsonwebtoken": "^9.0.2"
->>>>>>> aadb31efe71d9a8f009ebceffae4d886e06c1749
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "nodemon": "^3.0.3"
