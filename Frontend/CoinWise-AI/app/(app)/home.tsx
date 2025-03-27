@@ -52,6 +52,11 @@ export default function HomeScreen() {
               onPress={() => router.push('/(app)/chat')} 
             />
             <ActionButton 
+              icon="trending-up" 
+              label="Investments"
+              onPress={() => router.push('/(app)/investments')} 
+            />
+            <ActionButton 
               icon="receipt-long" 
               label="Tax Estimation"
               onPress={() => router.push('/taxestimation')} 

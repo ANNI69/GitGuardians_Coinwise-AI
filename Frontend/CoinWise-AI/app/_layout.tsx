@@ -38,6 +38,14 @@ export default function RootLayout() {
         />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" options={{ headerShown: false }} />
+        <Stack.Screen 
+          name="investment-details" 
+          options={{ 
+            headerShown: true,
+            title: 'Investment Details',
+            headerBackTitle: 'Back'
+          }} 
+        />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

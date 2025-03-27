@@ -3,7 +3,7 @@ from models.suggestionAI import ask_suggestion, QuestionRequest
 
 suggestion_bp = Blueprint('suggestion', __name__)
 
-@suggestion_bp.route('/suggestion/ask', methods=['POST'])
+@suggestion_bp.route('/suggestion', methods=['POST'])
 def get_suggestion():
     try:
         data = request.get_json()
