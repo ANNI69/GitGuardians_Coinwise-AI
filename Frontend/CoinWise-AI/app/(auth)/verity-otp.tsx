@@ -44,7 +44,13 @@ export default function VerifyOTPScreen() {
         ))}
       </View>
       
-      <Link href={`/(auth)/sync-bank?phone=${phone}`} asChild>
+      <Link 
+        href={{
+          pathname: "/sync-bank",
+          params: { phone }
+        }} 
+        asChild
+      >
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
