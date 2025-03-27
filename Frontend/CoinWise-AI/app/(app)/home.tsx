@@ -1,6 +1,5 @@
-import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
-import { useLocalSearchParams, Stack, Link } from 'expo-router';
+import { useLocalSearchParams, Stack, Link, useRouter } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import AccountSummary from '@/components/AccountSummary';
 import TransactionList from '@/components/TransactionList';
@@ -9,6 +8,7 @@ import { banks } from '../../constants/bank';
 export default function HomeScreen() {
   const { bankId } = useLocalSearchParams();
   const selectedBank = banks.find(bank => bank.id === bankId);
+  const router = useRouter();
 
   return (
     <ScrollView style={styles.container}>
@@ -25,28 +25,39 @@ export default function HomeScreen() {
         <AccountSummary bankId={bankId as string} />
 
         {/* Quick Actions */}
-        {/* <View style={styles.quickActions}>
-          <ActionButton 
-            icon="swap-horiz" 
-            label="Transfer"
-            onPress={() => {}} 
-          />
-          <ActionButton 
-            icon="account-balance-wallet" 
-            label="Accounts"
-            onPress={() => {}}
-          />
-          <ActionButton 
-            icon="attach-money" 
-            label="Pay"
-            onPress={() => {}}
-          />
-          <ActionButton 
-            icon="dashboard" 
-            label="More"
-            onPress={() => {}}
-          />
-        </View> */}
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          style={styles.quickActionsContainer}
+        >
+          <View style={styles.quickActions}>
+            <ActionButton 
+              icon="swap-horiz" 
+              label="Transfer"
+              onPress={() => {}} 
+            />
+            <ActionButton 
+              icon="picture-as-pdf" 
+              label="PDF"
+              onPress={() => router.push('/pdfPage')} 
+            />
+            <ActionButton 
+              icon="receipt-long" 
+              label="Transactions"
+              onPress={() => router.push('/transactions')} 
+            />
+            <ActionButton 
+              icon="chat" 
+              label="Chat"
+              onPress={() => router.push('/(app)/chat')} 
+            />
+            <ActionButton 
+              icon="receipt-long" 
+              label="Tax Estimation"
+              onPress={() => router.push('/taxestimation')} 
+            />
+          </View>
+        </ScrollView>
 
         {/* Recent Transactions */}
         <View style={styles.transactionsContainer}>
@@ -124,15 +135,17 @@ const styles = StyleSheet.create({
     marginTop: 12,
     letterSpacing: 0.5
   },
+  quickActionsContainer: {
+    marginVertical: 32,
+  },
   quickActions: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 32,
-    paddingHorizontal: 10
+    paddingHorizontal: 20,
+    gap: 16,
   },
   actionButton: {
     alignItems: 'center',
-    width: 80
+    width: 80,
   },
   iconContainer: {
     backgroundColor: '#F3F4F6',

@@ -51,6 +51,7 @@ export default function TransactionsScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 40,
     flex: 1,
     backgroundColor: '#F8F9FA',
   },
