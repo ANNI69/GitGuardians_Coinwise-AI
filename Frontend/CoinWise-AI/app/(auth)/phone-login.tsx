@@ -24,7 +24,7 @@ export default function PhoneLoginScreen() {
       
       <Link 
         href={{
-          pathname: "/(auth)/verity-otp",
+          pathname: "/verity-otp",
           params: { phone: phoneNumber }
         }} 
         asChild
