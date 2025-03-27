@@ -109,23 +109,15 @@ const PdfPage = () => {
         Ifsc: "HDFC0000001",
         transactions: [
           {
-            date: "2023-05-15",
-            description: "Grocery Store",
-            amount: 125.75,
-          },
-          {
-            date: "2023-05-16",
-            description: "Gas Station",
-            amount: 45.2,
-          },
-          {
-            date: "2023-05-17",
-            description: "Online Shopping(Amazon)",
-            amount: 89.99,
-          },
-          {
-            date: "2023-05-18",
-            description: "Restaurant",
+            shopping: {
+              name: "Amazon",
+              amount: 10000,
+              date: "2023-05-15",
+              category: "Shopping",
+              type: "expense",
+              paymentMethod: "credit card",
+              isRecurring: false,
+            },
           },
         ],
       },
