@@ -17,7 +17,8 @@
         "RECEIVE_SMS"
       ],
       "foregroundImage": "./assets/images/adaptive-icon.png",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ffffff",
+      "package": "com.anii77.CoinWiseAI"
     }
   },
   "web": {
