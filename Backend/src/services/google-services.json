@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "847496763935",
+    "project_id": "coin-f7cbc",
+    "storage_bucket": "coin-f7cbc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847496763935:android:77f027bebb8daf0325132a",
+        "android_client_info": {
+          "package_name": "com.coinwiseai.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRoQbk-xZnmvllkP8ZhHnAD_bph9DHKoU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
