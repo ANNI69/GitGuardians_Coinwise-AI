@@ -26,10 +26,10 @@ export default function SyncBankScreen() {
             onPress={handleBankSync}
           >
             <View style={styles.bankIcon}>
-              <MaterialIcons name="account-balance" size={24} color="#0066CC" />
+              <MaterialIcons name="account-balance" size={28} color="#0066CC" />
             </View>
             <Text style={styles.bankName}>{bank} Bank</Text>
-            <MaterialIcons name="chevron-right" size={24} color="#666" />
+            <MaterialIcons name="chevron-right" size={20} color="#999" />
           </TouchableOpacity>
         ))}
       </View>
@@ -44,34 +44,49 @@ export default function SyncBankScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 24,
+    backgroundColor: '#FFFFFF',
   },
   header: {
-    marginBottom: 40,
+    marginTop: 40,
+    marginBottom: 48,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 12,
+    color: '#000000',
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: '#666666',
+    lineHeight: 22,
   },
   bankList: {
-    marginBottom: 20,
+    marginBottom: 24,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
   },
   bankItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 16,
+    paddingVertical: 18,
+    paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#EEE',
+    borderBottomColor: '#F0F0F0',
   },
   bankIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     backgroundColor: '#EBF5FF',
     justifyContent: 'center',
     alignItems: 'center',
@@ -79,14 +94,18 @@ const styles = StyleSheet.create({
   },
   bankName: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 17,
+    fontWeight: '500',
+    color: '#333333',
   },
   manualButton: {
     alignSelf: 'center',
-    padding: 10,
+    padding: 16,
+    marginTop: 8,
   },
   manualButtonText: {
     color: '#0066CC',
-    fontWeight: 'bold',
+    fontWeight: '600',
+    fontSize: 16,
   },
 });
