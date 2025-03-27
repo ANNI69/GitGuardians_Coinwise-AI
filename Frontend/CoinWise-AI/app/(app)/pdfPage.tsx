@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
-import { DataTable } from "react-native-paper";
 
 interface Transaction {
   id: string;
@@ -51,18 +50,12 @@ const PdfPage = () => {
     setError(null);
 
     try {
-      // In a real app, you would upload the file to your backend here
-      // For this example, we'll simulate the API call
-
-      // Read the file as base64 (simulating what you'd send to backend)
       const base64Data = await FileSystem.readAsStringAsync(pdfUri, {
         encoding: FileSystem.EncodingType.Base64,
       });
 
-      // Simulate API call to backend
-      // Replace this with actual fetch/axios call in your implementation
+      // Simulate API call
       const mockResponse = await simulateApiCall(base64Data);
-
       setTransactions(mockResponse.transactions);
     } catch (err) {
       setError("Failed to process PDF");
@@ -72,14 +65,11 @@ const PdfPage = () => {
     }
   };
 
-  // This simulates what your backend would return
   const simulateApiCall = async (
     base64Data: string
   ): Promise<{ transactions: Transaction[] }> => {
-    // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // Mock data - in a real app, this would come from your backend
     return {
       transactions: [
         {
@@ -154,25 +144,27 @@ const PdfPage = () => {
         <View style={styles.resultsContainer}>
           <Text style={styles.resultsTitle}>Processed Transactions</Text>
 
-          <DataTable style={styles.table}>
-            <DataTable.Header>
-              <DataTable.Title>Date</DataTable.Title>
-              <DataTable.Title>Description</DataTable.Title>
-              <DataTable.Title numeric>Amount</DataTable.Title>
-              <DataTable.Title>Category</DataTable.Title>
-            </DataTable.Header>
+          <View style={styles.table}>
+            <View style={styles.tableHeader}>
+              <Text style={[styles.headerCell, styles.cell]}>Date</Text>
+              <Text style={[styles.headerCell, styles.cell]}>Description</Text>
+              <Text style={[styles.headerCell, styles.cell, styles.amountCell]}>
+                Amount
+              </Text>
+              <Text style={[styles.headerCell, styles.cell]}>Category</Text>
+            </View>
 
             {transactions.map((transaction) => (
-              <DataTable.Row key={transaction.id}>
-                <DataTable.Cell>{transaction.date}</DataTable.Cell>
-                <DataTable.Cell>{transaction.description}</DataTable.Cell>
-                <DataTable.Cell numeric>
+              <View key={transaction.id} style={styles.tableRow}>
+                <Text style={styles.cell}>{transaction.date}</Text>
+                <Text style={styles.cell}>{transaction.description}</Text>
+                <Text style={[styles.cell, styles.amountCell]}>
                   ${transaction.amount.toFixed(2)}
-                </DataTable.Cell>
-                <DataTable.Cell>{transaction.category}</DataTable.Cell>
-              </DataTable.Row>
+                </Text>
+                <Text style={styles.cell}>{transaction.category}</Text>
+              </View>
             ))}
-          </DataTable>
+          </View>
         </View>
       )}
     </ScrollView>
@@ -245,6 +237,33 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     overflow: "hidden",
     marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "#ddd",
+  },
+  tableHeader: {
+    flexDirection: "row",
+    backgroundColor: "#f2f2f2",
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
+  tableRow: {
+    flexDirection: "row",
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+  headerCell: {
+    fontWeight: "bold",
+    color: "#333",
+  },
+  cell: {
+    flex: 1,
+    paddingHorizontal: 8,
+    textAlign: "left",
+  },
+  amountCell: {
+    textAlign: "right",
   },
 });
 
