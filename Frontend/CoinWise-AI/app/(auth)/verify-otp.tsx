@@ -1,11 +1,14 @@
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
-import { Link, useLocalSearchParams } from 'expo-router';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData, Alert } from 'react-native';
+import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import { useState, useRef } from 'react';
+import { verifyOTP } from '../../services/auth'; // You'll need to implement this
 
 export default function VerifyOTPScreen() {
   const { phone } = useLocalSearchParams();
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
   const inputRefs = useRef<(TextInput | null)[]>([]);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleOtpChange = (value: string, index: number) => {
     const newOtp = [...otp];
@@ -20,6 +23,32 @@ export default function VerifyOTPScreen() {
   const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) => {
     if (e.nativeEvent.key === 'Backspace' && !otp[index] && index > 0 && inputRefs.current[index - 1]) {
       inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handleVerifyOTP = async () => {
+    const otpCode = otp.join('');
+    if (otpCode.length !== 6) {
+      Alert.alert('Error', 'Please enter a 6-digit OTP');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const isValid = await verifyOTP(phone as string, otpCode);
+      if (isValid) {
+        router.push({
+          pathname: "/sync-bank",
+          params: { phone }
+        });
+      } else {
+        Alert.alert('Error', 'Invalid OTP. Please try again.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to verify OTP. Please try again.');
+      console.error('OTP verification error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,21 +73,21 @@ export default function VerifyOTPScreen() {
         ))}
       </View>
       
-      <Link 
-        href={{
-          pathname: "/sync-bank",
-          params: { phone }
-        }} 
-        asChild
+      <TouchableOpacity 
+        style={[
+          styles.button,
+          loading && styles.disabledButton
+        ]}
+        onPress={handleVerifyOTP}
+        disabled={loading}
       >
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Continue</Text>
-        </TouchableOpacity>
-      </Link>
+        <Text style={styles.buttonText}>
+          {loading ? 'Verifying...' : 'Continue'}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -97,6 +126,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 20,
+  },
+  disabledButton: {
+    backgroundColor: '#CCCCCC',
+    opacity: 0.7,
   },
   buttonText: {
     color: 'white',
