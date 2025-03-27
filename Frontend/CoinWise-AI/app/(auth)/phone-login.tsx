@@ -1,11 +1,28 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Link } from 'expo-router';
 import { useState } from 'react';
 import PhoneInput from '../../components/PhoneInput';
+import { sendOTP } from '../../services/auth'; // You'll need to implement this
 
 export default function PhoneLoginScreen() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isValid, setIsValid] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSendOTP = async () => {
+    if (!isValid) return;
+    
+    setLoading(true);
+    try {
+      await sendOTP(phoneNumber);
+      // OTP sent successfully, navigation handled by Link
+    } catch (error) {
+      Alert.alert('Error', 'Failed to send OTP. Please try again.');
+      console.error('OTP send error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -24,7 +41,7 @@ export default function PhoneLoginScreen() {
       
       <Link 
         href={{
-          pathname: "/verity-otp",
+          pathname: "/verify-otp",
           params: { phone: phoneNumber }
         }} 
         asChild
@@ -32,11 +49,14 @@ export default function PhoneLoginScreen() {
         <TouchableOpacity
           style={[
             styles.button,
-            !isValid && styles.disabledButton
+            (!isValid || loading) && styles.disabledButton
           ]}
-          disabled={!isValid}
+          disabled={!isValid || loading}
+          onPress={handleSendOTP}
         >
-          <Text style={styles.button}>Get Started</Text>
+          <Text style={styles.button}>
+            {loading ? 'Sending...' : 'Get Started'}
+          </Text>
         </TouchableOpacity>
       </Link>
     </View>
