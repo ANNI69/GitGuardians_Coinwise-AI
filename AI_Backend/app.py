@@ -7,15 +7,19 @@ from langchain_groq import ChatGroq
 import os
 from dotenv import load_dotenv
 import re
+from routes.suggestion import suggestion_bp
 
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
+# Register blueprints
+app.register_blueprint(suggestion_bp)
+
 # Configure Groq
-groq_api_key = os.getenv("GROQ_API_KEY")
-llm = ChatGroq(temperature=1, model_name="llama-3.3-70b-versatile", groq_api_key=groq_api_key)
+# groq_api_key = os.getenv("GROQ_API_KEY")
+llm = ChatGroq(temperature=1, model_name="llama-3.3-70b-versatile", groq_api_key='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')
 
 # Transaction Extraction Template
 extraction_template = """
