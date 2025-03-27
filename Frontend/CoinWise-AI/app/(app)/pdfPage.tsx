@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import {
   View,
   Text,
@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
+    marginTop: 40,
     backgroundColor: "#f5f5f5",
   },
   title: {
