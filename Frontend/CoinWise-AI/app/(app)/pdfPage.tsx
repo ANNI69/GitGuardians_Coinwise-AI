@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import {
   View,
   Text,
@@ -97,6 +97,39 @@ const PdfPage = () => {
 
   const simulateApiCall = async () => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    const dummyOne = {
+      income: 500000,
+      age: 40,
+      occupation: "Software Engineer",
+      bankOne: {
+        name: "HDFC Bank",
+        balance: 80000,
+        accountNumber: "XXXX XXXX 7890",
+        Ifsc: "HDFC0000001",
+        transactions: [
+          {
+            date: "2023-05-15",
+            description: "Grocery Store",
+            amount: 125.75,
+          },
+          {
+            date: "2023-05-16",
+            description: "Gas Station",
+            amount: 45.2,
+          },
+          {
+            date: "2023-05-17",
+            description: "Online Shopping(Amazon)",
+            amount: 89.99,
+          },
+          {
+            date: "2023-05-18",
+            description: "Restaurant",
+          },
+        ],
+      },
+    };
 
     // Dummy transactions data
     const transactions = [
