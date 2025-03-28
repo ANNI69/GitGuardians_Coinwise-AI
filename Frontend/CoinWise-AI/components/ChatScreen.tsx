@@ -10,10 +10,30 @@ interface Message {
 }
 
 const presetPrompts = [
-  "How can I save more from my monthly salary?",
-  "What's the 50-30-20 budgeting rule?",
-  "Best ways to reduce food expenses",
-  "How to create an emergency fund?",
+  {
+    id: 'savings',
+    text: "How can I save more from my monthly salary?",
+    icon: "savings",
+    category: "Savings"
+  },
+  {
+    id: 'budgeting',
+    text: "What's the 50-30-20 budgeting rule?",
+    icon: "account-balance",
+    category: "Budgeting"
+  },
+  {
+    id: 'expenses',
+    text: "Best ways to reduce food expenses",
+    icon: "restaurant",
+    category: "Expenses"
+  },
+  {
+    id: 'emergency',
+    text: "How to create an emergency fund?",
+    icon: "emergency",
+    category: "Planning"
+  }
 ];
 
 const ChatScreen = () => {
@@ -96,6 +116,21 @@ const ChatScreen = () => {
     router.replace('/sign-in');
   };
 
+  const renderPrompt = ({ item }: { item: typeof presetPrompts[0] }) => (
+    <TouchableOpacity 
+      style={styles.promptButton}
+      onPress={() => handlePresetPrompt(item.text)}
+    >
+      <View style={styles.promptIconContainer}>
+        <MaterialIcons name={item.icon as any} size={20} color="#ffffff" />
+      </View>
+      <View style={styles.promptContent}>
+        <Text style={styles.promptCategory}>{item.category}</Text>
+        <Text style={styles.promptText}>{item.text}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
     <KeyboardAvoidingView 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -145,22 +180,17 @@ const ChatScreen = () => {
         </View>
       ) : (
         <>
-          <FlatList
-            data={presetPrompts}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <TouchableOpacity 
-                style={styles.promptButton}
-                onPress={() => handlePresetPrompt(item)}
-              >
-                <MaterialIcons name="lightbulb" size={16} color="white" style={styles.promptIcon} />
-                <Text style={styles.promptText}>{item}</Text>
-              </TouchableOpacity>
-            )}
-            keyExtractor={(item, index) => index.toString()}
-            style={styles.promptList}
-          />
+          <View style={styles.promptSection}>
+            <Text style={styles.promptSectionTitle}>Quick Tips</Text>
+            <FlatList
+              data={presetPrompts}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={renderPrompt}
+              keyExtractor={(item) => item.id}
+              style={styles.promptList}
+            />
+          </View>
 
           <FlatList
             data={messages}
@@ -254,6 +284,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
+    marginRight: 10,
+    borderWidth: 1,
   },
   headerText: {
     fontSize: 24,
@@ -261,32 +293,58 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     color: '#1a237e',
   },
-  promptList: {
-    padding: 16,
+  promptSection: {
     backgroundColor: '#ffffff',
+    paddingVertical: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#e9ecef',
+  },
+  promptSectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1a237e',
+    marginLeft: 20,
+    marginBottom: 12,
+  },
+  promptList: {
+    paddingHorizontal: 16,
   },
   promptButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#1a237e',
-    padding: 12,
-    borderRadius: 25,
+    padding: 16,
+    borderRadius: 16,
     marginRight: 12,
-    elevation: 3,
+    width: 280,
+    elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
-  promptIcon: {
-    marginRight: 8,
+  promptIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  promptContent: {
+    flex: 1,
+  },
+  promptCategory: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: 'rgba(255, 255, 255, 0.8)',
+    marginBottom: 4,
   },
   promptText: {
-    color: 'white',
+    color: '#ffffff',
     fontSize: 14,
-    fontWeight: '600',
+    lineHeight: 20,
   },
   chatHistory: {
     flex: 1,

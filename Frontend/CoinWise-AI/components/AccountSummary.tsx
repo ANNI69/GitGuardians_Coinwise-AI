@@ -3,9 +3,9 @@ import { View, Text, StyleSheet } from 'react-native';
 export default function AccountSummary({ bankId }: { bankId: string }) {
   // In a real app, fetch this data from your backend/API
   const accountData = {
-    balance: '₹85,432.00',
-    accountNumber: 'XXXX XXXX 7890',
-    ifsc: 'HDFC0000123',
+    balance: '₹1,432',
+    accountNumber: 'XXXX XXXX 4874',
+    ifsc: 'HDFC0000423',
   };
 
   return (

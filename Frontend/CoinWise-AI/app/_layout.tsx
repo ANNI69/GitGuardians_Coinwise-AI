@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
@@ -38,14 +39,34 @@ function RootLayoutNav() {
     if (!isSignedIn && !inAuthGroup) {
       // Redirect to the sign-in page if not signed in
       router.replace('/sign-in');
-    } else if (isSignedIn && inAuthGroup) {
-      // Redirect to the app home page if signed in and trying to access auth pages
-      router.replace('/(app)/home');
-    } else if (isSignedIn && !inAppGroup && !inAuthGroup) {
-      // Redirect to app home if signed in and not in app or auth group
-      router.replace('/(app)/home');
+    } else if (isSignedIn) {
+      if (inAuthGroup) {
+        // If signed in and in auth group, check setup and redirect accordingly
+        checkSetupAndRedirect();
+      } else if (!inAppGroup) {
+        // If signed in but not in app group, redirect to app
+        checkSetupAndRedirect();
+      }
     }
   }, [isSignedIn, segments, isLoaded]);
+
+  const checkSetupAndRedirect = async () => {
+    try {
+      const userSalary = await AsyncStorage.getItem('userSalary');
+      const userGoals = await AsyncStorage.getItem('userGoals');
+
+      if (!userSalary) {
+        router.replace('/(app)/salary-setup');
+      } else if (!userGoals) {
+        router.replace('/(app)/financial-goals');
+      } else {
+        router.replace('/(app)/home');
+      }
+    } catch (error) {
+      console.error('Error checking setup:', error);
+      router.replace('/(app)/home');
+    }
+  };
 
   useEffect(() => {
     if (loaded) {

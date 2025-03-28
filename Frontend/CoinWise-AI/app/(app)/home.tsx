@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useLocalSearchParams, Stack, Link, useRouter } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
-import { PieChart } from 'react-native-chart-kit';
+import { PieChart, LineChart } from 'react-native-chart-kit';
 import { useAuth } from '@clerk/clerk-expo';
 import AccountSummary from '@/components/AccountSummary';
 import TransactionList from '@/components/TransactionList';
@@ -22,6 +22,23 @@ export default function HomeScreen() {
       console.error('Error signing out:', error);
     }
   };
+
+  // Generate random transaction data for the last 7 days
+  const generateRandomData = () => {
+    const data = [];
+    const today = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      data.push({
+        date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        amount: Math.floor(Math.random() * 1000) + 100
+      });
+    }
+    return data;
+  };
+
+  const transactionData = generateRandomData();
 
   return (
     <View style={styles.container}>
@@ -65,13 +82,18 @@ export default function HomeScreen() {
               />
               <ActionButton
                 icon="trending-up"
-                label="Investments"
+                label="Investment Sugesstions"
                 onPress={() => router.push('/(app)/investments')}
+              />
+              <ActionButton
+                icon="savings"
+                label="Savings Plans"
+                onPress={() => router.push('/(app)/savings')}
               />
               <ActionButton
                 icon="swap-horiz"
                 label="Transfer"
-                onPress={() => { }}
+                onPress={() => router.push('/transfer')}
               />
               <ActionButton
                 icon="picture-as-pdf"
@@ -103,37 +125,27 @@ export default function HomeScreen() {
                   {
                     name: 'Food',
                     amount: 450,
-                    color: '#FF6B6B',
-                    legendFontColor: '#7F7F7F',
-                    legendFontSize: 12
+                    color: '#FF6B6B'
                   },
                   {
-                    name: 'Transport',
+                    // name: 'Transportation', 
                     amount: 200,
-                    color: '#4ECDC4',
-                    legendFontColor: '#7F7F7F',
-                    legendFontSize: 12
+                    color: '#4ECDC4'
                   },
                   {
-                    name: 'Shopping',
+                    name: 'Subscription',
                     amount: 300,
-                    color: '#45B7D1',
-                    legendFontColor: '#7F7F7F',
-                    legendFontSize: 12
+                    color: '#45B7D1'
                   },
                   {
-                    name: 'Bills',
+                    name: 'Investment',
                     amount: 800,
-                    color: '#96CEB4',
-                    legendFontColor: '#7F7F7F',
-                    legendFontSize: 12
+                    color: '#96CEB4'
                   },
                   {
-                    name: 'Entertainment',
+                    name: 'Other',
                     amount: 150,
-                    color: '#FFEEAD',
-                    legendFontColor: '#7F7F7F',
-                    legendFontSize: 12
+                    color: '#FFEEAD'
                   }
                 ]}
                 width={300}
@@ -147,9 +159,45 @@ export default function HomeScreen() {
                 absolute
               />
             </View>
+
+            {/* Weekly Transactions Graph */}
+            <View style={styles.weeklyTransactionsContainer}>
+              <Text style={styles.weeklyTransactionsTitle}>Weekly Transactions</Text>
+              <LineChart
+                data={{
+                  labels: transactionData.map(item => item.date),
+                  datasets: [{
+                    data: transactionData.map(item => item.amount)
+                  }]
+                }}
+                width={Dimensions.get('window').width - 60}
+                height={220}
+                chartConfig={{
+                  backgroundColor: '#ffffff',
+                  backgroundGradientFrom: '#ffffff',
+                  backgroundGradientTo: '#ffffff',
+                  decimalPlaces: 0,
+                  color: (opacity = 1) => `rgba(37, 99, 235, ${opacity})`,
+                  style: {
+                    borderRadius: 16
+                  }
+                }}
+                bezier
+                style={styles.lineChart}
+              />
+            </View>
           </View>
         </View>
       </ScrollView>
+      
+      {/* Floating Bottom Button */}
+      <TouchableOpacity 
+        style={styles.floatingButton}
+        onPress={() => router.push('/(app)/chat')}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.robotEmoji}>🤖</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -309,5 +357,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10
-  }
+  },
+  floatingButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#2563EB',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  robotEmoji: {
+    fontSize: 32,
+  },
+  weeklyTransactionsContainer: {
+    marginTop: 30,
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
+  },
+  weeklyTransactionsTitle: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#111827',
+    marginBottom: 20,
+  },
+  lineChart: {
+    marginVertical: 8,
+    borderRadius: 16,
+  },
 });

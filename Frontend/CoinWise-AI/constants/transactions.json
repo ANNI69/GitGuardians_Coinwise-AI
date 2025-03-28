@@ -1,0 +1,216 @@
+{
+  "transactions": [
+    {
+      "id": "1",
+      "type": "transfer",
+      "amount": -50,
+      "description": "Transfer to Sahil",
+      "date": "2024-03-20",
+      "status": "completed"
+    },
+    {
+      "id": "2",
+      "type": "payment",
+      "amount": -1250,
+      "description": "Big Bazaar Monthly Groceries",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "shopping-cart"
+    },
+    {
+      "id": "2a",
+      "type": "transfer",
+      "amount": -500,
+      "description": "Transfer to Rajesh Kumar",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "swap-horiz"
+    },
+    {
+      "id": "2b",
+      "type": "payment",
+      "amount": -899,
+      "description": "Swiggy - Biryani House",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "restaurant"
+    },
+    {
+      "id": "2c",
+      "type": "transfer",
+      "amount": -2000,
+      "description": "Sent to Priya Sharma",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "swap-horiz"
+    },
+    {
+      "id": "2d",
+      "type": "payment",
+      "amount": -499,
+      "description": "DMart Shopping",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "shopping-cart"
+    },
+    {
+      "id": "2e",
+      "type": "payment",
+      "amount": -149,
+      "description": "Chai Point",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "local-cafe"
+    },
+    {
+      "id": "2f",
+      "type": "transfer",
+      "amount": -1500,
+      "description": "Rent to Amit Patel",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "home"
+    },
+    {
+      "id": "2g",
+      "type": "payment",
+      "amount": -299,
+      "description": "Metro Card Recharge",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "train"
+    },
+    {
+      "id": "2h",
+      "type": "payment",
+      "amount": -799,
+      "description": "Reliance Fresh",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "shopping-cart"
+    },
+    {
+      "id": "2i",
+      "type": "transfer",
+      "amount": -3000,
+      "description": "To Meera Reddy",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "swap-horiz"
+    },
+    {
+      "id": "2j",
+      "type": "payment",
+      "amount": -249,
+      "description": "PVR Cinemas",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "movie"
+    },
+    {
+      "id": "2k",
+      "type": "payment",
+      "amount": -599,
+      "description": "Flipkart Order",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "shopping-bag"
+    },
+    {
+      "id": "2l",
+      "type": "transfer",
+      "amount": -1000,
+      "description": "To Suresh Iyer",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "swap-horiz"
+    },
+    {
+      "id": "2m",
+      "type": "payment",
+      "amount": -399,
+      "description": "Medplus Pharmacy",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "local-pharmacy"
+    },
+    {
+      "id": "2n",
+      "type": "payment",
+      "amount": -199,
+      "description": "Ola Ride",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "local-taxi"
+    },
+    {
+      "id": "2o",
+      "type": "transfer",
+      "amount": -2500,
+      "description": "To Ananya Desai",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "swap-horiz"
+    },
+    {
+      "id": "2p",
+      "type": "payment",
+      "amount": -999,
+      "description": "Amazon Pay Bill",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "payment"
+    },
+    {
+      "id": "2q",
+      "type": "payment",
+      "amount": -449,
+      "description": "Petrol Pump",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "local-gas-station"
+    },
+    {
+      "id": "2r",
+      "type": "transfer",
+      "amount": -1750,
+      "description": "To Karthik Menon",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "swap-horiz"
+    },
+    {
+      "id": "2s",
+      "type": "payment",
+      "amount": -299,
+      "description": "Mobile Recharge",
+      "date": "2024-03-19",
+      "status": "completed",
+      "icon": "smartphone"
+    },
+    {
+      "id": "3",
+      "type": "deposit",
+      "amount": 1000,
+      "description": "Salary Deposit",
+      "date": "2024-03-18",
+      "status": "completed"
+    },
+    {
+      "id": "4",
+      "type": "payment",
+      "amount": -15,
+      "description": "Zomato Order",
+      "date": "2024-03-17",
+      "status": "completed"
+    },
+    {
+      "id": "5",
+      "type": "transfer",
+      "amount": -200,
+      "description": "Transfer to Family",
+      "date": "2024-03-16",
+      "status": "completed"
+    }
+  ]
+}

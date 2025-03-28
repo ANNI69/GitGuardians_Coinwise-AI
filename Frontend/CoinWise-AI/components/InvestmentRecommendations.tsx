@@ -48,9 +48,9 @@ export const InvestmentRecommendations = () => {
     try {
       setLoading(true);
       setError(null);
-      console.log('Attempting to fetch recommendations...');
+      const API_URL ='http://192.168.1.87:5000/api/investment/get-recommendations';
       
-      const response = await fetch('http://192.168.1.89:5000/api/investment/get-recommendations', {
+      const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
