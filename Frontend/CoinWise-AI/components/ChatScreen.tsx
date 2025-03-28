@@ -1,7 +1,8 @@
-import  { useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useAuth, useClerk } from '@clerk/clerk-expo';
 
 interface Message {
   text: string;
@@ -9,10 +10,30 @@ interface Message {
 }
 
 const presetPrompts = [
-  "How can I save more from my monthly salary?",
-  "What's the 50-30-20 budgeting rule?",
-  "Best ways to reduce food expenses",
-  "How to create an emergency fund?",
+  {
+    id: 'savings',
+    text: "How can I save more from my monthly salary?",
+    icon: "savings",
+    category: "Savings"
+  },
+  {
+    id: 'budgeting',
+    text: "What's the 50-30-20 budgeting rule?",
+    icon: "account-balance",
+    category: "Budgeting"
+  },
+  {
+    id: 'expenses',
+    text: "Best ways to reduce food expenses",
+    icon: "restaurant",
+    category: "Expenses"
+  },
+  {
+    id: 'emergency',
+    text: "How to create an emergency fund?",
+    icon: "emergency",
+    category: "Planning"
+  }
 ];
 
 const ChatScreen = () => {
@@ -20,6 +41,8 @@ const ChatScreen = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { isSignedIn } = useAuth();
+  const { signOut } = useClerk();
 
   const handlePresetPrompt = async (prompt: string) => {
     setLoading(true);
@@ -88,6 +111,26 @@ const ChatScreen = () => {
     setLoading(false);
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    router.replace('/sign-in');
+  };
+
+  const renderPrompt = ({ item }: { item: typeof presetPrompts[0] }) => (
+    <TouchableOpacity 
+      style={styles.promptButton}
+      onPress={() => handlePresetPrompt(item.text)}
+    >
+      <View style={styles.promptIconContainer}>
+        <MaterialIcons name={item.icon as any} size={20} color="#ffffff" />
+      </View>
+      <View style={styles.promptContent}>
+        <Text style={styles.promptCategory}>{item.category}</Text>
+        <Text style={styles.promptText}>{item.text}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
     <KeyboardAvoidingView 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -105,75 +148,101 @@ const ChatScreen = () => {
           >
             <MaterialIcons name="trending-up" size={24} color="#1a237e" />
           </TouchableOpacity>
+          {isSignedIn ? (
+            <TouchableOpacity 
+              style={styles.headerButton}
+              onPress={handleSignOut}
+            >
+              <MaterialIcons name="logout" size={24} color="#1a237e" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity 
+              style={styles.headerButton}
+              onPress={() => router.push('/sign-in')}
+            >
+              <MaterialIcons name="login" size={24} color="#1a237e" />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
       
-      <FlatList
-        data={presetPrompts}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => (
+      {!isSignedIn ? (
+        <View style={styles.authPrompt}>
+          <MaterialIcons name="lock" size={48} color="#1a237e" />
+          <Text style={styles.authTitle}>Welcome to CoinWise AI</Text>
+          <Text style={styles.authSubtitle}>Sign in to get personalized financial advice</Text>
           <TouchableOpacity 
-            style={styles.promptButton}
-            onPress={() => handlePresetPrompt(item)}
+            style={styles.authButton}
+            onPress={() => router.push('/sign-in')}
           >
-            <MaterialIcons name="lightbulb" size={16} color="white" style={styles.promptIcon} />
-            <Text style={styles.promptText}>{item}</Text>
+            <Text style={styles.authButtonText}>Sign In</Text>
           </TouchableOpacity>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-        style={styles.promptList}
-      />
-
-      <FlatList
-        data={messages}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <View style={[
-            styles.messageBubble, 
-            item.isUser ? styles.userBubble : styles.botBubble
-          ]}>
-            {!item.isUser && (
-              <MaterialIcons name="smart-toy" size={20} color="#2c3e50" style={styles.botIcon} />
-            )}
-            <Text style={[
-              styles.messageText,
-              item.isUser ? styles.userMessageText : styles.botMessageText
-            ]}>{item.text}</Text>
-          </View>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-        style={styles.chatHistory}
-      />
-
-      {loading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color="#3498db" />
-          <Text style={styles.loadingText}>Thinking...</Text>
         </View>
-      )}
+      ) : (
+        <>
+          <View style={styles.promptSection}>
+            <Text style={styles.promptSectionTitle}>Quick Tips</Text>
+            <FlatList
+              data={presetPrompts}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={renderPrompt}
+              keyExtractor={(item) => item.id}
+              style={styles.promptList}
+            />
+          </View>
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={inputMessage}
-          onChangeText={setInputMessage}
-          placeholder="Ask about savings..."
-          placeholderTextColor="#95a5a6"
-          multiline
-        />
-        <TouchableOpacity 
-          style={styles.sendButton}
-          onPress={handleSendMessage}
-          disabled={!inputMessage.trim() || loading}
-        >
-          <MaterialIcons 
-            name="send" 
-            size={24} 
-            color={inputMessage.trim() ? '#3498db' : '#95a5a6'} 
+          <FlatList
+            data={messages}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <View style={[
+                styles.messageBubble, 
+                item.isUser ? styles.userBubble : styles.botBubble
+              ]}>
+                {!item.isUser && (
+                  <MaterialIcons name="smart-toy" size={20} color="#2c3e50" style={styles.botIcon} />
+                )}
+                <Text style={[
+                  styles.messageText,
+                  item.isUser ? styles.userMessageText : styles.botMessageText
+                ]}>{item.text}</Text>
+              </View>
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            style={styles.chatHistory}
           />
-        </TouchableOpacity>
-      </View>
+
+          {loading && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="small" color="#3498db" />
+              <Text style={styles.loadingText}>Thinking...</Text>
+            </View>
+          )}
+
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={inputMessage}
+              onChangeText={setInputMessage}
+              placeholder="Ask about savings..."
+              placeholderTextColor="#95a5a6"
+              multiline
+            />
+            <TouchableOpacity 
+              style={styles.sendButton}
+              onPress={handleSendMessage}
+              disabled={!inputMessage.trim() || loading}
+            >
+              <MaterialIcons 
+                name="send" 
+                size={24} 
+                color={inputMessage.trim() ? '#3498db' : '#95a5a6'} 
+              />
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </KeyboardAvoidingView>
   );
 };
@@ -215,6 +284,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
+    marginRight: 10,
+    borderWidth: 1,
   },
   headerText: {
     fontSize: 24,
@@ -222,32 +293,58 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     color: '#1a237e',
   },
-  promptList: {
-    padding: 16,
+  promptSection: {
     backgroundColor: '#ffffff',
+    paddingVertical: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#e9ecef',
+  },
+  promptSectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1a237e',
+    marginLeft: 20,
+    marginBottom: 12,
+  },
+  promptList: {
+    paddingHorizontal: 16,
   },
   promptButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#1a237e',
-    padding: 12,
-    borderRadius: 25,
+    padding: 16,
+    borderRadius: 16,
     marginRight: 12,
-    elevation: 3,
+    width: 280,
+    elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
-  promptIcon: {
-    marginRight: 8,
+  promptIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  promptContent: {
+    flex: 1,
+  },
+  promptCategory: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: 'rgba(255, 255, 255, 0.8)',
+    marginBottom: 4,
   },
   promptText: {
-    color: 'white',
+    color: '#ffffff',
     fontSize: 14,
-    fontWeight: '600',
+    lineHeight: 20,
   },
   chatHistory: {
     flex: 1,
@@ -346,6 +443,41 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
+  },
+  authPrompt: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  authTitle: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#1a237e',
+    marginTop: 16,
+  },
+  authSubtitle: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 24,
+  },
+  authButton: {
+    backgroundColor: '#1a237e',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  authButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 

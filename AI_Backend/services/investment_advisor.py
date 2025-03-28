@@ -2,12 +2,24 @@ from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
 import json
 import logging
+import os
 
 class InvestmentAdvisor:
     def __init__(self):
         self.llm = ChatGroq(temperature=0.3, model_name="llama-3.3-70b-versatile")
-        with open('data/investment_schemes.json') as f:
-            self.schemes = json.load(f)
+        # Get the directory where this file is located
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        # Go up one level to the AI_Backend directory
+        backend_dir = os.path.dirname(current_dir)
+        # Construct path to data file
+        data_file = os.path.join(backend_dir, 'data', 'investment_schemes.json')
+        
+        try:
+            with open(data_file) as f:
+                self.schemes = json.load(f)
+        except FileNotFoundError:
+            logging.error(f"Could not find investment schemes file at: {data_file}")
+            self.schemes = []
             
         # Configure logging
         logging.basicConfig(level=logging.INFO)
