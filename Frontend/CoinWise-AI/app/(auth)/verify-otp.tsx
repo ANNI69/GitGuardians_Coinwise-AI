@@ -38,7 +38,7 @@ export default function VerifyOTPScreen() {
       const isValid = await verifyOTP(phone as string, otpCode);
       if (isValid) {
         router.push({
-          pathname: "/sync-bank",
+          pathname: "/(app)/finance-dashboard",
           params: { phone }
         });
       } else {

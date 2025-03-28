@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from routes.investment_routes import investment_bp
 from routes.user import user_bp
+from routes.fraud_routes import fraud_bp
 from PyPDF2 import PdfReader
 import re
 
@@ -19,6 +20,7 @@ CORS(app)
 # Register blueprints
 app.register_blueprint(user_bp, url_prefix='/api')
 app.register_blueprint(investment_bp, url_prefix='/api/investment')
+app.register_blueprint(fraud_bp, url_prefix='/api/fraud')
 
 # Get API key from environment variables
 groq_api_key = os.getenv('GROQ_API_KEY')

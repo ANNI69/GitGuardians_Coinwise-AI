@@ -56,6 +56,11 @@ export default function HomeScreen() {
               label="Tax Estimation"
               onPress={() => router.push('/taxestimation')} 
             />
+            <ActionButton 
+              icon="pie-chart" 
+              label="Finance Dashboard"
+              onPress={() => router.push('/(app)/Finance-Dashboard')} 
+            />
           </View>
         </ScrollView>
 
