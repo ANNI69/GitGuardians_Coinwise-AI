@@ -6,6 +6,8 @@ from routes.fraud_routes import fraud_bp
 from PyPDF2 import PdfReader
 import re
 
+
+from routes.chat_routes import chat_bp
 from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
 import os
@@ -16,11 +18,12 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
-
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "your-default-secret-key-for-development")
 # Register blueprints
 app.register_blueprint(user_bp, url_prefix='/api')
 app.register_blueprint(investment_bp, url_prefix='/api/investment')
 app.register_blueprint(fraud_bp, url_prefix='/api/fraud')
+app.register_blueprint(chat_bp, url_prefix='/api/chat')
 
 # Get API key from environment variables
 groq_api_key = os.getenv('GROQ_API_KEY')
