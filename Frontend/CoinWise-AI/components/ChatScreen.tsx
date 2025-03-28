@@ -1,6 +1,7 @@
 import  { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 interface Message {
   text: string;
@@ -18,11 +19,12 @@ const ChatScreen = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handlePresetPrompt = async (prompt: string) => {
     setLoading(true);
     try {
-      const response = await fetch('http://192.168.247.50:5000/suggestion/ask', {
+      const response = await fetch('http://192.168.220.50:5000/suggestion/ask', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,8 +94,18 @@ const ChatScreen = () => {
       style={styles.container}
     >
       <View style={styles.header}>
-        <MaterialIcons name="savings" size={28} color="#2c3e50" />
-        <Text style={styles.headerText}>Savings Advisor</Text>
+        <View style={styles.headerLeft}>
+          <MaterialIcons name="savings" size={28} color="#2c3e50" />
+          <Text style={styles.headerText}>Savings Advisor</Text>
+        </View>
+        <View style={styles.headerRight}>
+          <TouchableOpacity 
+            style={styles.headerButton}
+            onPress={() => router.push('/(app)/investments')}
+          >
+            <MaterialIcons name="trending-up" size={24} color="#1a237e" />
+          </TouchableOpacity>
+        </View>
       </View>
       
       <FlatList
@@ -175,6 +187,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 20,
     backgroundColor: '#ffffff',
     borderBottomWidth: 1,
@@ -184,6 +197,24 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerButton: {
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: '#f8f9fa',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
   headerText: {
     fontSize: 24,
