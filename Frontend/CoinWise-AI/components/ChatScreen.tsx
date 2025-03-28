@@ -47,12 +47,12 @@ const ChatScreen = () => {
   const handlePresetPrompt = async (prompt: string) => {
     setLoading(true);
     try {
-      const response = await fetch('http://192.168.220.50:5000/suggestion/ask', {
+      const response = await fetch('http://192.168.1.89:5000/api/chat/message', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ question: prompt }),
+        body: JSON.stringify({ message: prompt }),
       });
       
       if (!response.ok) {
@@ -81,12 +81,12 @@ const ChatScreen = () => {
     
     setLoading(true);
     try {
-      const response = await fetch('http://192.168.247.50:5000/suggestion/ask', {
+      const response = await fetch('http://127.0.0.1:5000/api/chat/message', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ question: inputMessage }),
+        body: JSON.stringify({ message: inputMessage }),
       });
       
       if (!response.ok) {
