@@ -50,7 +50,7 @@ export const InvestmentRecommendations = () => {
       setError(null);
       console.log('Attempting to fetch recommendations...');
       
-      const response = await fetch('http://192.168.220.50:5000/api/investment/get-recommendations', {
+      const response = await fetch('http://192.168.1.89:5000/api/investment/get-recommendations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

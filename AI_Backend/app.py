@@ -4,14 +4,30 @@ from routes.investment_routes import investment_bp
 from routes.user import user_bp
 from PyPDF2 import PdfReader
 import re
+import json
+import os
 
 from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
-import os
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
+
+# Load JSON data on startup
+def load_json_data():
+    try:
+        with open('data.json', 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        print("Warning: data.json not found")
+        return {}
+    except json.JSONDecodeError:
+        print("Warning: Invalid JSON in data.json")
+        return {}
+
+# Initialize global data
+json_data = load_json_data()
 
 app = Flask(__name__)
 CORS(app)
