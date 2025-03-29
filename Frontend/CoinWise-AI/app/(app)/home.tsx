@@ -128,7 +128,7 @@ export default function HomeScreen() {
                     color: '#FF6B6B'
                   },
                   {
-                    // name: 'Transportation', 
+                    name: 'Transportation', 
                     amount: 200,
                     color: '#4ECDC4'
                   },

@@ -129,7 +129,7 @@ const PdfPage = () => {
         id: "1",
         date: "2023-05-15",
         description: "Grocery Store",
-        amount: 125.75,
+        amount: 500,
         category: "Food",
         type: "expense",
         paymentMethod: "credit card",
@@ -140,7 +140,7 @@ const PdfPage = () => {
         id: "2",
         date: "2023-05-16",
         description: "Gas Station",
-        amount: 45.2,
+        amount: 149,
         category: "Transportation",
         type: "expense",
         paymentMethod: "cash",
@@ -151,7 +151,7 @@ const PdfPage = () => {
         id: "3",
         date: "2023-05-17",
         description: "Online Shopping(Amazon)",
-        amount: 89.99,
+        amount: 100,
         category: "Shopping",
         type: "expense",
         paymentMethod: "credit card",
@@ -162,7 +162,7 @@ const PdfPage = () => {
         id: "4",
         date: "2023-05-18",
         description: "Restaurant",
-        amount: 65.3,
+        amount: 650,
         category: "Food",
         type: "expense",
         paymentMethod: "credit card",
@@ -173,7 +173,7 @@ const PdfPage = () => {
         id: "5",
         date: "2023-05-19",
         description: "Large Purchase - Electronics",
-        amount: 999.99,
+        amount: 1250,
         category: "Shopping",
         type: "expense",
         paymentMethod: "credit card",
@@ -184,7 +184,7 @@ const PdfPage = () => {
         id: "6",
         date: "2023-05-20",
         description: "Multiple Small Purchases",
-        amount: 25.5,
+        amount: 25,
         category: "Food",
         type: "expense",
         paymentMethod: "debit card",
@@ -286,7 +286,7 @@ const PdfPage = () => {
         <Text style={styles.alertMessage}>{alert.message}</Text>
         <View style={styles.alertDetails}>
           <Text style={styles.alertAmount}>
-            ${Math.abs(alert.transaction.amount).toFixed(2)}
+            ₹{Math.abs(alert.transaction.amount).toFixed(2)}
           </Text>
           <Text style={styles.alertDate}>{alert.transaction.date}</Text>
         </View>
@@ -328,7 +328,7 @@ const PdfPage = () => {
           <View style={styles.statItem}>
             <Text style={styles.statLabel}>Total Spent</Text>
             <Text style={styles.statValue}>
-              ${insight.totalSpent.toFixed(2)}
+              ₹{insight.totalSpent.toFixed(2)}
             </Text>
           </View>
           <View style={styles.statItem}>
@@ -459,7 +459,7 @@ const PdfPage = () => {
                       { color: transaction.amount < 0 ? "#ff4444" : "#00C851" },
                     ]}
                   >
-                    ${Math.abs(transaction.amount).toFixed(2)}
+                    ₹{Math.abs(transaction.amount).toFixed(2)}
                   </Text>
                   <Text style={styles.cell}>{transaction.category}</Text>
                 </View>

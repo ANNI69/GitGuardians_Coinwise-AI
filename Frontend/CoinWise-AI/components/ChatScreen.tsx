@@ -47,7 +47,7 @@ const ChatScreen = () => {
   const handlePresetPrompt = async (prompt: string) => {
     setLoading(true);
     try {
-      const response = await fetch('http://192.168.1.89:5000/api/chat/message', {
+      const response = await fetch('http://192.168.1.87:5000/api/chat/message', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,10 +60,11 @@ const ChatScreen = () => {
       }
       
       const data = await response.json();
+      console.log('Response data:', data);
       setMessages(prev => [
         ...prev,
         { text: prompt, isUser: true },
-        { text: data.answer, isUser: false }
+        { text: data.response || data.answer || "No response received", isUser: false }
       ]);
     } catch (error) {
       console.error('Error:', error);
@@ -81,7 +82,7 @@ const ChatScreen = () => {
     
     setLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/chat/message', {
+      const response = await fetch('http://192.168.1.89:5000/api/chat/message', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,10 +95,11 @@ const ChatScreen = () => {
       }
       
       const data = await response.json();
+      console.log('Response data:', data);
       setMessages(prev => [
         ...prev,
         { text: inputMessage, isUser: true },
-        { text: data.answer, isUser: false }
+        { text: data.response || data.answer || "No response received", isUser: false }
       ]);
       setInputMessage('');
     } catch (error) {
